@@ -1,8 +1,8 @@
-package ua.ithillel;
+package ua.ithillel.product;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Objects;
 
 public class Product {
 
@@ -10,13 +10,13 @@ public class Product {
     private final Integer id;
     private Double price;
     private Integer discount;
-    private final String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd-HH:mm:ss"));
+    private final LocalDateTime createDate = LocalDateTime.now();
 
     public Product(ProductTypes type, Integer id, Double price) {
         this.type = type;
         this.id = id;
         this.price = price;
-        ProductList.add(this);
+        ProductList.addProduct(this);
     }
 
     public Product(ProductTypes type, Integer id, Double price, Integer discount) {
@@ -25,8 +25,8 @@ public class Product {
         setDiscount(discount);
     }
 
-    public String getType() {
-        return type.name();
+    public ProductTypes getType() {
+        return type;
     }
 
     public Double getPrice() {
@@ -41,8 +41,8 @@ public class Product {
         return discount;
     }
 
-    public String getDate() {
-        return date;
+    public LocalDateTime getCreateDate() {
+        return createDate;
     }
 
     public void setPrice(Double price) {
@@ -57,9 +57,34 @@ public class Product {
 
     @Override
     public String toString() {
-        String withDiscount = "Product{type=%s, id=%d, price=%.2f, discount=%d%%, date='%s'}";
-        String withoutDiscount = "Product{type=%s, id=%d, price=%.2f, date='%5$s'}";
+        String datePattern = ", date='%5$td-%5$tm-%5$tY'}";
+        String withDiscount = "{type=%s, id=%d, price=%.2f$, discount=%d%%" + datePattern;
+        String withoutDiscount = "{type=%s, id=%d, price=%.2f$" + datePattern;
         String formatPattern = discount != null ? withDiscount : withoutDiscount;
-        return String.format(Locale.US, formatPattern, type, id, price, discount, date);
+        return String.format(Locale.US, formatPattern, type, id, price, discount, createDate);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Product product = (Product) o;
+
+        if (type != product.type) return false;
+        if (!Objects.equals(id, product.id)) return false;
+        if (!Objects.equals(price, product.price)) return false;
+        if (!Objects.equals(discount, product.discount)) return false;
+        return Objects.equals(createDate, product.createDate);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type != null ? type.hashCode() : 0;
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (price != null ? price.hashCode() : 0);
+        result = 31 * result + (discount != null ? discount.hashCode() : 0);
+        result = 31 * result + createDate.hashCode();
+        return result;
     }
 }

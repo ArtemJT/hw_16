@@ -1,5 +1,15 @@
-package ua.ithillel;
+package ua.ithillel.product;
 
 public enum ProductTypes {
-    BOOK, TOY;
+    BOOK("Book"), TOY("Toy"), OTHER("Other");
+
+    private final String name;
+
+    ProductTypes(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
