@@ -72,10 +72,8 @@ public class Product {
         Product product = (Product) o;
 
         if (type != product.type) return false;
-        if (!Objects.equals(id, product.id)) return false;
-        if (!Objects.equals(price, product.price)) return false;
-        if (!Objects.equals(discount, product.discount)) return false;
-        return Objects.equals(createDate, product.createDate);
+        return Objects.equals(id, product.id) && Objects.equals(price, product.price)
+                && Objects.equals(discount, product.discount) && Objects.equals(createDate, product.createDate);
     }
 
     @Override
